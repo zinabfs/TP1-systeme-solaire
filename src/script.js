@@ -15,7 +15,12 @@ scene.background = new THREE.Color(0x000030);
 /**
  * Textures Instancier le textureLoader ici pour ajouter les textures
  */
+// Charger la texture pour le fond
 const textureLoader = new THREE.TextureLoader();
+const backgroundTexture = textureLoader.load("/textures/galaxy.jpg");
+
+// Appliquer la texture au fond de la scène
+scene.background = backgroundTexture;
 
 /**
  * Objects
@@ -82,7 +87,7 @@ const neptune = createPlanet(
   new THREE.Vector3(24, 0, 0),
 );
 
-const createSaturnRings = (radius, innerRadius, texturePath, parentPlanet) => {
+const createRings = (radius, innerRadius, texturePath, parentPlanet) => {
   const ringGeometry = new THREE.RingGeometry(innerRadius, radius, 64);
   const ringMaterial = new THREE.MeshLambertMaterial({
     map: textureLoader.load(texturePath),
@@ -95,11 +100,17 @@ const createSaturnRings = (radius, innerRadius, texturePath, parentPlanet) => {
 };
 
 // Création des anneaux de Saturne
-const saturnRings = createSaturnRings(
+const saturnRings = createRings(
   1.2,
   1.5,
   "/textures/saturnringmap.png",
   saturn,
+);
+const uranusRings = createRings(
+  0.8,
+  1.2,
+  "/textures/uranusringmap.png",
+  uranus,
 );
 
 // Ajout de la lune
@@ -159,7 +170,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000,
 );
-camera.position.set(10, 1, 10);
+camera.position.set(0, 0, 5);
 camera.lookAt(new THREE.Vector3(0, 0, 0));
 scene.add(camera);
 
@@ -181,14 +192,14 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
  */
 const clock = new THREE.Clock();
 
-const mercuryOrbitPeriod = 1;
+const mercuryOrbitPeriod = 0.5;
 const venusOrbitPeriod = 2;
-const earthOrbitPeriod = 3;
-const marsOrbitPeriod = 4;
-const jupiterOrbitPeriod = 5;
-const saturnOrbitPeriod = 6;
-const uranusOrbitPeriod = 7;
-const neptuneOrbitPeriod = 8;
+const earthOrbitPeriod = 1.5;
+const marsOrbitPeriod = 3;
+const jupiterOrbitPeriod = 2.5;
+const saturnOrbitPeriod = 4;
+const uranusOrbitPeriod = 3.5;
+const neptuneOrbitPeriod = 6;
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
@@ -216,7 +227,10 @@ const tick = () => {
 
   neptune.position.x = Math.cos(elapsedTime / neptuneOrbitPeriod) * 24;
   neptune.position.z = Math.sin(elapsedTime / neptuneOrbitPeriod) * 24;
+
   saturnRings.rotation.x = elapsedTime * 0.2;
+  uranusRings.rotation.x = elapsedTime * 0.5;
+
   controls.update();
 
   renderer.render(scene, camera);
