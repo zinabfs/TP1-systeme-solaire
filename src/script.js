@@ -9,7 +9,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 // const canvas = document.querySelector("canvas.webgl");
 
 // Scene Créer la scene ici
-const scene = new THREE.Scene();
+// const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000030);
 
 /**
